@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Scanner</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-navbar *navbar>
+    <ion-title>
+        Home
+    </ion-title>
+</ion-navbar>
+
+<ion-content class="home">
+
+
+<ion-card *ngIf="createdCode">
+   <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
+
+ </ion-card>
+
+
+    <button ion-button full icon-left (click)="click()" color="secondary"><ion-icon name="qr-scanner"></ion-icon>Scan Code</button>
+</ion-content>

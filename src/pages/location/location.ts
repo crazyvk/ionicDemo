@@ -24,24 +24,26 @@ export class Location {
   }
 
   loadMap(){
+    let mapOptions = {
+      center:  new google.maps.LatLng(23.5674025,36.8531655),
+      zoom: 2,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-    this.geolocation.getCurrentPosition().then((position) => {
-
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-      let mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-      this.addMarker(latLng);
-    }, (err) => {
-      console.log(err);
-    });
-
+    this.geolocation.getCurrentPosition().then(
+           (resp)=>{
+              
+              this.addMarker(new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude));
+               console.log(resp)
+           },
+           (error)=>{
+               console.info(error)
+           }
+       );
   }
+
+
 
   addMarker(latLng){
 

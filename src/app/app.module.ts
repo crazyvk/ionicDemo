@@ -4,7 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Camera } from '@ionic-native/camera';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
-
+import { Push } from '@ionic-native/push';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -43,6 +43,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
     Geolocation,
     Camera,
     BarcodeScanner,
+    Push,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

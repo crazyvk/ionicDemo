@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, AlertController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -15,21 +16,56 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
-
+  options: PushOptions;
+  pushObject: PushObject
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public push: Push, public alertCtrl: AlertController) {
     this.initializeApp();
 
+    platform.ready().then(() => {
+         this.pushsetup();
+       });
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'List ww', component: ListPage },
+      { title: 'List', component: ListPage },
       { title: 'Location', component: Location },
       { title: 'Scanner', component: Scanner }
     ];
-
   }
+
+  pushsetup() {
+     const options: PushOptions = {
+      android: {
+          senderID: '<yoursenderidhere>'
+      },
+      ios: {
+          alert: 'true',
+          badge: true,
+          sound: 'false'
+      },
+      windows: {}
+   };
+   const pushObject: PushObject = this.push.init(options);
+
+   pushObject.on('notification').subscribe((notification: any) => {
+     if (notification.additionalData.foreground) {
+       let youralert = this.alertCtrl.create({
+         title: 'New Push notification',
+         message: notification.message
+       });
+       youralert.present();
+     }
+   });
+
+   pushObject.on('registration').subscribe((registration: any) => {
+   console.log('wwwwww' + JSON.stringify(registration));
+      //do whatever you want with the registration ID
+   });
+
+   pushObject.on('error').subscribe(error => alert('Error with Push plugin' + error));
+ }
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -45,4 +81,10 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+  // pushObject: PushObject = this.push.init(this.options);
+
+
+
+
 }
